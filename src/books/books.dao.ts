@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { BooksDto } from '../dto/book.dto';
 import { Books,BookDocument } from '../schema/book.schema';
 
@@ -15,7 +15,7 @@ export class BooksDao {
     return this.bookModel.find().populate('author');
   }
 
-  async findOne(id: string) {
+  async findOne(id: ObjectId) {
     const category = await this.bookModel.findById(id).populate('author');
     if (!category) {
       throw new NotFoundException();
@@ -32,9 +32,9 @@ export class BooksDao {
     return createdBook.save();
   }
 
-  async update(id: string, bookData: BooksDto) {
+  async update(id: ObjectId, bookData: BooksDto) {
     const book = await this.bookModel
-      .findByIdAndUpdate(id, bookData)
+      .findOneAndReplace(id, bookData)
       .setOptions({ overwrite: true, new: true });
     if (!book) {
       throw new NotFoundException();
@@ -42,7 +42,7 @@ export class BooksDao {
     return book;
   }
 
-  async delete(bookId: string) {
+  async delete(bookId: ObjectId) {
     const result = await this.bookModel.findByIdAndDelete(bookId);
     if (!result) {
       throw new NotFoundException();

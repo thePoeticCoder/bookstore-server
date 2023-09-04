@@ -26,19 +26,19 @@ constructor(private readonly booksService: BooksService) {}
   }
 
   @Get(':id')
-  async getCategory(@Param() { id }: ParamsWithId) {
+  async getBook(@Param() { id }: ParamsWithId) {
   	return this.booksService.findBookById(id);
   }
 
 @Post('createBook')
-  async createCategory(
+  async createBook(
     @Body() bookData: BooksDto,
     
   ) {
     return this.booksService.createBook(bookData);
   }
 
-    @Put(':id')
+    @Put('updateBookById')
   async updateBook(
     @Param() { id }: ParamsWithId,
     @Body() bookData: BooksDto,
@@ -46,7 +46,7 @@ constructor(private readonly booksService: BooksService) {}
     return this.booksService.updateBook(id, bookData);
   }
 
-@Delete(':id')
+@Delete('deleteBookById')
   async deleteBook(@Param() { id }: ParamsWithId) {
     return this.booksService.deleteBook(id);
   }

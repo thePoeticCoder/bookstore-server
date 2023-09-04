@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { BooksDto } from 'src/dto/book.dto';
 import { Books,BookDocument } from 'src/schema/book.schema';
 import { BooksDao } from './books.dao';
@@ -15,7 +15,7 @@ export class BooksService {
     return this.booksDao.findAll();
   }
 
-  async findBookById(id: string) {
+  async findBookById(id: ObjectId) {
     
 	return this.booksDao.findOne(id);
   }
@@ -24,11 +24,11 @@ export class BooksService {
 		return this.booksDao.create(categoryData);
   }
 
-  async updateBook(id: string, bookData: BooksDto) {
+  async updateBook(id: ObjectId, bookData: BooksDto) {
 		return this.booksDao.update(id,bookData);
   }
 
-  async deleteBook(bookId: string) {
+  async deleteBook(bookId: ObjectId) {
 		return this.booksDao.delete(bookId);
   }
 }
