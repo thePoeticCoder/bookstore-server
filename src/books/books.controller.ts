@@ -9,13 +9,6 @@ import {
   Put,
   UseInterceptors,
 } from '@nestjs/common';
-// import CategoriesService from './categories.service';
-// import ParamsWithId from '../utils/paramsWithId';
-// import CategoryDto from './dto/category.dto';
-// import JwtAuthenticationGuard from '../authentication/jwt-authentication.guard';
-// import RequestWithUser from '../authentication/requestWithUser.interface';
-// import MongooseClassSerializerInterceptor from '../utils/mongooseClassSerializer.interceptor';
-// import { Category } from './category.schema';
 import { BooksService } from './books.service';
 import { Books } from 'src/schema/book.schema';
 import ParamsWithId from '../utils/validator.paramWithId';
@@ -37,8 +30,7 @@ constructor(private readonly booksService: BooksService) {}
   	return this.booksService.findBookById(id);
   }
 
-	@Post('createBook')
-//   @UseGuards(JwtAuthenticationGuard)
+@Post('createBook')
   async createCategory(
     @Body() bookData: BooksDto,
     
@@ -58,8 +50,6 @@ constructor(private readonly booksService: BooksService) {}
   async deleteBook(@Param() { id }: ParamsWithId) {
     return this.booksService.deleteBook(id);
   }
-
-
 }
 
 
