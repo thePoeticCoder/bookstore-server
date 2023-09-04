@@ -12,7 +12,7 @@ nconf
   .argv()
   .env()
   .file({ file: `config/config.${env}.json` });
-  console.log(nconf.get('application'));
+  
 
 const config: any = {};
 
