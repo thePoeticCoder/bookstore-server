@@ -29,12 +29,12 @@ constructor(private readonly booksService: BooksService) {}
 
   @Get()
   async getAllBooks() {
-    return this.booksService.findAll();
+    return this.booksService.findAllBooks();
   }
 
   @Get(':id')
   async getCategory(@Param() { id }: ParamsWithId) {
-  	return this.booksService.findOne(id);
+  	return this.booksService.findBookById(id);
   }
 
 	@Post('createBook')
@@ -43,7 +43,7 @@ constructor(private readonly booksService: BooksService) {}
     @Body() bookData: BooksDto,
     
   ) {
-    return this.booksService.create(bookData);
+    return this.booksService.createBook(bookData);
   }
 
     @Put(':id')
@@ -51,12 +51,12 @@ constructor(private readonly booksService: BooksService) {}
     @Param() { id }: ParamsWithId,
     @Body() bookData: BooksDto,
   ) {
-    return this.booksService.update(id, bookData);
+    return this.booksService.updateBook(id, bookData);
   }
 
 @Delete(':id')
   async deleteBook(@Param() { id }: ParamsWithId) {
-    return this.booksService.delete(id);
+    return this.booksService.deleteBook(id);
   }
 
 

@@ -3,50 +3,33 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BooksDto } from 'src/dto/book.dto';
 import { Books,BookDocument } from 'src/schema/book.schema';
+import { BooksDao } from './books.dao';
 
 @Injectable()
 export class BooksService {
 
-  constructor(
-    @InjectModel(Books.name) private bookModel: Model<BookDocument>,
-  ) {}
+	constructor(private readonly booksDao: BooksDao) {}
 
-  async findAll() {
-    return this.bookModel.find().populate('author');
+
+  async findAllBooks() {
+    return this.booksDao.findAll();
   }
 
-  async findOne(id: string) {
-    const category = await this.bookModel.findById(id).populate('author');
-    if (!category) {
-      throw new NotFoundException();
-    }
-    return category;
+  async findBookById(id: string) {
+    
+	return this.booksDao.findOne(id);
   }
 
-  create(categoryData: BooksDto,) {
-	console.log("I am creating an books");
-    const createdBook = new this.bookModel({
-      ...categoryData,
-      
-    });
-    return createdBook.save();
+  createBook(categoryData: BooksDto,) {
+		return this.booksDao.create(categoryData);
   }
 
-  async update(id: string, bookData: BooksDto) {
-    const book = await this.bookModel
-      .findByIdAndUpdate(id, bookData)
-      .setOptions({ overwrite: true, new: true });
-    if (!book) {
-      throw new NotFoundException();
-    }
-    return book;
+  async updateBook(id: string, bookData: BooksDto) {
+		return this.booksDao.update(id,bookData);
   }
 
-  async delete(bookId: string) {
-    const result = await this.bookModel.findByIdAndDelete(bookId);
-    if (!result) {
-      throw new NotFoundException();
-    }
+  async deleteBook(bookId: string) {
+		return this.booksDao.delete(bookId);
   }
 }
 
