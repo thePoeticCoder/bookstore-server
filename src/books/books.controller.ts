@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Post,
   Put,
@@ -14,6 +15,7 @@ import { Books } from 'src/schema/book.schema';
 import ParamsWithId from '../utils/validator.paramWithId';
 import { BooksDto } from '../dto/book.dto';
 import MongooseClassSerializerInterceptor from '../utils/MongooseClassSerializer';
+import {  JwtVerification } from 'src/middleware/jwtAuth.middleware';
 
 @Controller('books')
 @UseInterceptors(MongooseClassSerializerInterceptor(Books))
@@ -29,7 +31,7 @@ constructor(private readonly booksService: BooksService) {}
   async getBook(@Param() { id }: ParamsWithId) {
   	return this.booksService.findBookById(id);
   }
-
+@JwtVerification()
 @Post('createBook')
   async createBook(
     @Body() bookData: BooksDto,
