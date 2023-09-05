@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { HydratedDocument, ObjectId } from 'mongoose';
 import { Transform } from 'class-transformer';
 
-export type AddressDocument = Address & Document;
+export type AddressDocument=  HydratedDocument<Address>;;
 
 @Schema()
 export class Address {
   @Transform(({ value }) => value.toString())
-  _id: string;
+  _id: ObjectId;
 
   @Prop()
   city: string;

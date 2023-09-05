@@ -14,6 +14,7 @@ import MongooseClassSerializerInterceptor from '../utils/MongooseClassSerializer
 import { User } from 'src/schema/user.schema';
 import { UserService } from './user.service';
 import { CreateUserDto } from 'src/dto/create.user.dto';
+import { LoginUserDto } from 'src/dto/login.user.dto';
 
 @Controller('user')
 @UseInterceptors(MongooseClassSerializerInterceptor(User))
@@ -31,11 +32,19 @@ export class UserController {
   }
 
 @Post('createUser')
-  async createBook(
-    @Body() bookData: CreateUserDto,
+  async createUser(
+    @Body() userData: CreateUserDto,
     
   ) {
-    return this.userService.createUser(bookData);
+    return this.userService.createUser(userData);
+  }
+
+  @Post('login')
+  async loginUser(
+    @Body() userData: LoginUserDto,
+    
+  ) {
+    return this.userService.loginUser(userData);
   }
 
 	@Put('updateUSerById')

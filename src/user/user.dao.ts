@@ -16,15 +16,23 @@ export class UserDao {
   }
 
   async findOne(id: ObjectId) {
-    const userData = await this.userModel.findById(id).populate('author');
+    const userData = await this.userModel.findById(id);
     if (!userData) {
       throw new NotFoundException();
     }
     return userData;
   }
 
+    async findOneByEmail(email: string) {
+    const userData = await this.userModel.findOne({email:email});
+    if (!userData) {
+		return false;
+    }
+    return userData;
+  }
+
   create(userData: CreateUserDto,) {
-	console.log("I am creating an books");
+	console.log("I am creating an Users");
     const createdUser = new this.userModel({
       ...userData,
       

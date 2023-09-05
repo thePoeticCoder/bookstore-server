@@ -1,17 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
+import { HydratedDocument, ObjectId } from 'mongoose';
 import { Exclude, Transform, Type } from 'class-transformer';
 import { Address, AddressSchema } from '../schema/address.shema';
 
 
-export type UserDocument = User & Document;
+export type UserDocument =  HydratedDocument<User>;
 
-@Schema({
-  toJSON: {
-    getters: true,
-    virtuals: true,
-  },
-})
+@Schema()
 export class User {
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
@@ -23,7 +18,7 @@ export class User {
   fullName: string;
 
   @Prop()
-  phoneNo: string;
+  phoneNo: number;
 
   @Prop()
   @Exclude()
@@ -34,6 +29,6 @@ export class User {
   address: Address;
 
 }
-const UserSchema = SchemaFactory.createForClass(User);
+export const UserSchema = SchemaFactory.createForClass(User);
 
-export { UserSchema };
+

@@ -18,8 +18,8 @@ export class BooksService {
     return this.booksDao.findOne(id);
   }
 
-  createBook(categoryData: BooksDto,) {
-    return this.booksDao.create(categoryData);
+  createBook(bookData: BooksDto,) {
+    return this.booksDao.create(bookData);
   }
 
   async updateBook(id: ObjectId, bookData: BooksDto) {

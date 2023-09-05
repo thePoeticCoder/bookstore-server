@@ -6,7 +6,7 @@ export class CreateUserDto {
 
   fullName: string;
 
-  phoneNo: string;
+  phoneNo: number;
 
   password: string;
 
