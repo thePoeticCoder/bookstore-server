@@ -73,4 +73,13 @@ config.databaseUrl = (() => {
   return "mongodb+srv://thePoeticCoder:root@cluster0.5auypbf.mongodb.net/everything"
 })();
 
+config.JWT_SECRET_KEY = (() => {
+  return "90448648645675489674987654689546894689746"
+})();
+
+config.REFRESH_JWT_SECRET_KEY = (() => {
+  return "90448648645675489674987654689546894689746"
+})();
+
+
 export const AppConfig = config;
