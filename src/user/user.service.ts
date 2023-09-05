@@ -92,4 +92,14 @@ private tokenService:TokenService
     throw new HttpException('Invalid input ' + err, HttpStatus.BAD_REQUEST);
     }
   }
+
+  
+async clearCookie(res: any) {
+    const emptyCookie = [
+      'Authentication=; HttpOnly; Path=/; Max-Age=0',
+      'Refresh=; HttpOnly; Path=/; Max-Age=0',
+    ];
+    res.setHeader('Set-Cookie', emptyCookie);
+  }
+
 }

@@ -1,4 +1,3 @@
-
 import {
   Body,
   Controller,
@@ -7,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
   UseInterceptors,
 } from '@nestjs/common';
 import ParamsWithId from '../utils/validator.paramWithId';
@@ -19,7 +19,7 @@ import { LoginUserDto } from 'src/dto/login.user.dto';
 @Controller('user')
 @UseInterceptors(MongooseClassSerializerInterceptor(User))
 export class UserController {
-	constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   @Get()
   async getAllUser() {
@@ -28,34 +28,37 @@ export class UserController {
 
   @Get(':id')
   async getUserById(@Param() { id }: ParamsWithId) {
-  	return this.userService.findUserById(id);
+    return this.userService.findUserById(id);
   }
 
-@Post('createUser')
-  async createUser(
-    @Body() userData: CreateUserDto,
-    
-  ) {
+  @Post('register')
+  async createUser(@Body() userData: CreateUserDto) {
     return this.userService.createUser(userData);
   }
 
   @Post('login')
-  async loginUser(
-    @Body() userData: LoginUserDto,
-    
-  ) {
+  async loginUser(@Body() userData: LoginUserDto) {
     return this.userService.loginUser(userData);
   }
 
-	@Put('updateUSerById')
-  	async updateBook(
+  @Post('logout')
+  public async logout(@Req() req: any) {
+    const { user } = req;
+    this.userService.clearCookie(req.res);
+    return {
+      logout: true,
+    };
+  }
+
+  @Put('updateUSerById')
+  async updateBook(
     @Param() { id }: ParamsWithId,
     @Body() bookData: CreateUserDto,
   ) {
     return this.userService.updateUser(id, bookData);
   }
 
-@Delete('deleteUserById')
+  @Delete('deleteUserById')
   async deleteBook(@Param() { id }: ParamsWithId) {
     return this.userService.deleteUserById(id);
   }
