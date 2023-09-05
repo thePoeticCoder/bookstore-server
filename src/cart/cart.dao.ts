@@ -11,8 +11,10 @@ export class CartDao {
     @InjectModel(Cart.name) private cartModel: Model<cartDocument>,
   ) {}
 
-  async findOne(id: ObjectId) {
-    const cartData = await this.cartModel.findById(id);
+  async findOne(_id: ObjectId) {
+    console.log("cart id se find karo");
+    const cartData = await this.cartModel.findById(_id);
+    console.log(cartData.totalAmount,"in daooooooooooooooooooooo")
     if (!cartData) {
       throw new NotFoundException();
     }

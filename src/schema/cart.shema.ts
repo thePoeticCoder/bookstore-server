@@ -7,7 +7,7 @@ export type cartDocument = HydratedDocument<Cart>;
 
 @Schema()
 export class Cart {
-
+@Transform(({ value }) => value.toString())
   _id: ObjectId;
 
   @Prop()
