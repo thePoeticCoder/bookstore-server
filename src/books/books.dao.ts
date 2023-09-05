@@ -16,17 +16,17 @@ export class BooksDao {
   }
 
   async findOne(id: ObjectId) {
-    const category = await this.bookModel.findById(id).populate('author');
-    if (!category) {
+    const bookData = await this.bookModel.findById(id).populate('author');
+    if (!bookData) {
       throw new NotFoundException();
     }
-    return category;
+    return bookData;
   }
 
-  create(categoryData: BooksDto,) {
+  create(bookData: BooksDto,) {
 	console.log("I am creating an books");
     const createdBook = new this.bookModel({
-      ...categoryData,
+      ...bookData,
       
     });
     return createdBook.save();
