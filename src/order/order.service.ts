@@ -14,6 +14,7 @@ export class OrderService {
 	async createOrder(data: ReqCreateOrderDto,) {
     console.log("service create order");
     try {
+      console.log(data.cartId);
       const cartData = await this.cartService.findCartById(data.cartId);
 
       const { addedBooks } = cartData;

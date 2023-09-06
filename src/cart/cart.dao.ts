@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import mongoose, { Model, ObjectId } from 'mongoose';
 import { Cart, cartDocument } from 'src/schema/cart.shema';
 import { CartDto } from 'src/dto/cart.dto';
 
@@ -11,10 +11,9 @@ export class CartDao {
     @InjectModel(Cart.name) private cartModel: Model<cartDocument>,
   ) {}
 
-  async findOne(_id: ObjectId) {
-    console.log("cart id se find karo");
-    const cartData = await this.cartModel.findById(_id);
-    console.log(cartData.totalAmount,"in daooooooooooooooooooooo")
+  async findOne(id: ObjectId) {
+    console.log("find the cart for id",id);
+    const cartData = await this.cartModel.findById(id);
     if (!cartData) {
       throw new NotFoundException();
     }

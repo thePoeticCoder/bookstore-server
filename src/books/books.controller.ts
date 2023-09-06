@@ -4,7 +4,6 @@ import {
   Controller,
   Delete,
   Get,
-  Inject,
   Param,
   Post,
   Put,
@@ -28,16 +27,16 @@ export class BooksController {
   @Get()
   async getAllBooks(@CtxId() ctxId: string,) {
     console.log(ctxId, "context id of the request in controller");
-    const data =  await this.booksService.findAllBooks(ctxId);
-    return new ApiResponse(data,ctxId)
+    const data = await this.booksService.findAllBooks(ctxId);
+    return new ApiResponse(data, ctxId)
   }
   @JwtVerification()
   @Get(':id')
   async getBook(@CtxId() ctxId: string,
     @Param() { id }: ParamsWithId) {
     console.log(ctxId, "context id of the request in controller");
-    const data =  this.booksService.findBookById(ctxId,id);
-     return new ApiResponse(data,ctxId)
+    const data = this.booksService.findBookById(ctxId, id);
+    return new ApiResponse(data, ctxId)
   }
   @JwtVerification()
   @Post('createBook')
@@ -45,9 +44,9 @@ export class BooksController {
     @Body() bookData: BooksDto,
 
   ) {
-   console.log(ctxId, "context id of the request in controller");
-    const data =  await this.booksService.createBook(ctxId,bookData);
-     return new ApiResponse(data,ctxId)
+    console.log(ctxId, "context id of the request in controller");
+    const data = await this.booksService.createBook(ctxId, bookData);
+    return new ApiResponse(data, ctxId)
   }
   @JwtVerification()
   @Put('updateBookById')
@@ -57,17 +56,17 @@ export class BooksController {
     @Body() bookData: BooksDto,
   ) {
     console.log(ctxId, "context id of the request in controller");
-    const data =  this.booksService.updateBook(ctxId,id, bookData);
-     return new ApiResponse(data,ctxId)
+    const data = this.booksService.updateBook(ctxId, id, bookData);
+    return new ApiResponse(data, ctxId)
   }
 
   @JwtVerification()
   @Delete('deleteBookById')
   async deleteBook(@CtxId() ctxId: string,
     @Param() { id }: ParamsWithId) {
-   console.log(ctxId, "context id of the request in controller");
-    const data =  this.booksService.deleteBook(ctxId,id);
-     return new ApiResponse(data,ctxId)
+    console.log(ctxId, "context id of the request in controller");
+    const data = this.booksService.deleteBook(ctxId, id);
+    return new ApiResponse(data, ctxId)
   }
 }
 

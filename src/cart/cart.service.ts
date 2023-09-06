@@ -13,6 +13,7 @@ constructor(private readonly cartDao: CartDao) { };
 
 
   async findCartById(id: ObjectId) {
+    console.log("cart service");
 
     return this.cartDao.findOne(id);
   }
