@@ -31,9 +31,9 @@ export class JwtAuthGuard implements CanActivate {
     } catch (err) {
       const { name = '*' } = err;
       if (name === 'TokenExpiredError') {
-        throw new ForbiddenException(401,"ACCESS TOKEN EXPIRED");
+        throw new ForbiddenException("ACCESS TOKEN EXPIRED");
       } else {
-        throw new ForbiddenException(403,"UNAUTHORIZED");
+        throw new ForbiddenException("UNAUTHORIZED");
       }
     }
   }

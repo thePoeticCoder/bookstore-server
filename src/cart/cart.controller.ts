@@ -24,7 +24,6 @@ import { ReqCreateOrderDto } from 'src/dto/createOrder.dto';
 @Controller('cart')
 
 @UseInterceptors(MongooseClassSerializerInterceptor(Cart))
-@UseInterceptors(MongooseClassSerializerInterceptor(Order))
 export class CartController {
 constructor(private readonly cartService: CartService) {}
 
@@ -40,14 +39,6 @@ constructor(private readonly cartService: CartService) {}
     
   ) {
     return this.cartService.createCart(cartData);
-  }
-
-  @Post('createOrder')
-  async createOrder(
-    @Body() data:ReqCreateOrderDto,
-  ) {
-    console.log("controller create order start");
-    return this.cartService.createOrder(data);
   }
 @Delete('deleteCartById')
   async (@Query() { id }: ParamsWithId) {

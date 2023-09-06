@@ -7,13 +7,11 @@ import { AppConfig } from 'src/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Cart, cartSchema } from 'src/schema/cart.shema';
 import { CartDao } from './cart.dao';
-import { OrderDao } from './order.dao';
-import { Order, orderSchema } from 'src/schema/order.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: Cart.name, schema: cartSchema },{ name: Order.name, schema: orderSchema },
+      { name: Cart.name, schema: cartSchema }
     ]),
     MiddlewareModule,
     JwtModule.register({
@@ -21,7 +19,8 @@ import { Order, orderSchema } from 'src/schema/order.schema';
     })
   ],
   controllers: [CartController],
-  providers: [CartService, CartDao, OrderDao]
+  providers: [CartService, CartDao,],
+  exports: [CartService],
 })
 export class CartModule { }
 

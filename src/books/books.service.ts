@@ -9,24 +9,29 @@ export class BooksService {
   constructor(private readonly booksDao: BooksDao) { }
 
 
-  async findAllBooks() {
+  async findAllBooks(ctxId:string) {
+    console.log(ctxId, "context id of the request in service file");
     return this.booksDao.findAll();
   }
 
-  async findBookById(id: ObjectId) {
+  async findBookById(ctxId:string,id: ObjectId) {
+    console.log(ctxId, "context id of the request in service file");
 
     return this.booksDao.findOne(id);
   }
 
-  createBook(bookData: BooksDto,) {
+  createBook(ctxId:string,bookData: BooksDto,) {
+    console.log(ctxId, "context id of the request in service file");
     return this.booksDao.create(bookData);
   }
 
-  async updateBook(id: ObjectId, bookData: BooksDto) {
+  async updateBook(ctxId:string,id: ObjectId, bookData: BooksDto) {
+    console.log(ctxId, "context id of the request in service file");
     return this.booksDao.update(id, bookData);
   }
 
-  async deleteBook(bookId: ObjectId) {
+  async deleteBook(ctxId:string,bookId: ObjectId) {
+    console.log(ctxId, "context id of the request in service file");
     return this.booksDao.delete(bookId);
   }
 }
