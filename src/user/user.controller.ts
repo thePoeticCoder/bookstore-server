@@ -16,20 +16,20 @@ import { UserService } from './user.service';
 import { CreateUserDto } from 'src/dto/create.user.dto';
 import { LoginUserDto } from 'src/dto/login.user.dto';
 
-@Controller('user')
+@Controller('users')
 @UseInterceptors(MongooseClassSerializerInterceptor(User))
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
   async getAllUser() {
-    return this.userService.findAllUSer();
+    return this.userService.findAllUsers();
   }
 
-  @Get(':id')
-  async getUserById(@Param() { id }: ParamsWithId) {
-    return this.userService.findUserById(id);
-  }
+  // @Get(':id')
+  // async getUserById(@Param() { id }: ParamsWithId) {
+  //   return this.userService.findUserById(id);
+  // }
 
   @Post('register')
   async createUser(@Body() userData: CreateUserDto) {
@@ -50,16 +50,16 @@ export class UserController {
     };
   }
 
-  @Put('updateUSerById')
-  async updateBook(
-    @Param() { id }: ParamsWithId,
-    @Body() bookData: CreateUserDto,
-  ) {
-    return this.userService.updateUser(id, bookData);
-  }
+  // @Put('updateUSerById')
+  // async updateBook(
+  //   @Param() { id }: ParamsWithId,
+  //   @Body() bookData: CreateUserDto,
+  // ) {
+  //   return this.userService.updateUser(id, bookData);
+  // }
 
-  @Delete('deleteUserById')
-  async deleteBook(@Param() { id }: ParamsWithId) {
-    return this.userService.deleteUserById(id);
-  }
+  // @Delete('deleteUserById')
+  // async deleteBook(@Param() { id }: ParamsWithId) {
+  //   return this.userService.deleteUserById(id);
+  // }
 }

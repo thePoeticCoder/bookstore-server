@@ -1,16 +1,8 @@
-import { AddressDto } from './address.dto';
-
 export class CreateUserDto {
-
   email: string;
-
-  fullName: string;
-
+  name: string;
   phoneNo: number;
-
   password: string;
-
-  address: AddressDto;
-
+  skills: string;
+  role: string;
 }
-

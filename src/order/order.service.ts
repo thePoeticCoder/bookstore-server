@@ -26,10 +26,12 @@ export class OrderService {
         throw Error("cart is not found");
       }
 
-      var totalAmountCal = 0;
+      let totalAmountCal = 0;
       addedBooks.forEach((book) => {
         totalAmountCal += book.price;
       })
+
+      console.log(totalAmountCal,"total Amount")
       const payload: CreateOrderDto = {
         email: cartData.email,
         cartId: data.cartId.toString(),

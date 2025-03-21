@@ -1,105 +1,107 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserDao } from './user.dao';
 import { CreateUserDto } from 'src/dto/create.user.dto';
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 import { EncryptionService } from 'src/utils/encryption.service';
 import { LoginUserDto } from 'src/dto/login.user.dto';
-import { TokenService } from 'src/user/toke.service';
+import { TokenService } from './toke.service';
 
 @Injectable()
 export class UserService {
-@Inject()
-private encryptionService:EncryptionService
+  @Inject()
+  private encryptionService: EncryptionService;
 
-@Inject()
-private tokenService:TokenService
+  @Inject()
+  private tokenService: TokenService;
 
-	constructor(private readonly userDao: UserDao ,) { }
+  constructor(private readonly userDao: UserDao) {}
 
+  async findAllUsers() {
+    return this.userDao.findAll();
+  }
 
-	async findAllUSer() {
-		return this.userDao.findAll();
-	}
+  async findUserById(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid user ID format');
+    }
+    return this.userDao.findOne(id);
+  }
 
-	async findUserById(id: ObjectId) {
+  async createUser(userData: CreateUserDto) {
+    const { email, password } = userData;
 
-		return this.userDao.findOne(id);
-	}
-
-	async createUser(userData: CreateUserDto,) {
-	const {email, password} = userData;
     const existingUser = await this.userDao.findOneByEmail(email);
     if (existingUser) {
-        throw new HttpException('USER ALREADY EXISTS', HttpStatus.FORBIDDEN);
-          }
-
-    try {
-        const encryptedPassword = await this.encryptionService.encryptPassword(password) 
-		userData.password = encryptedPassword;
-        return await this.userDao.create(userData);
-        
+      throw new HttpException('User already exists', HttpStatus.CONFLICT);
     }
-    catch (err) {
-            throw new HttpException('Invalid input ' + err, HttpStatus.BAD_REQUEST);
-    }
-	}
 
-	async loginUser(userData: LoginUserDto,) {
-	const {email, password} = userData;
+    const encryptedPassword =
+      await this.encryptionService.encryptPassword(password);
+    userData.password = encryptedPassword;
+
+    return this.userDao.create(userData);
+  }
+
+  async loginUser(userData: LoginUserDto) {
+    const { email, password } = userData;
+
     const existingUser = await this.userDao.findOneByEmail(email);
-	
     if (!existingUser) {
-        throw new HttpException('USER DOES NOT EXISTS', HttpStatus.FORBIDDEN);
-        }
-
-    try {
-		const {_id,phoneNo} = existingUser
-		const isMatched = await this.validateUser(password,existingUser.password)
-		const payload = {
-			_id,
-			email,
-			phoneNo
-		}
-		if(isMatched){
-			const tokenData = await this.tokenService.getToken(payload)
-
-			return {
-				...tokenData
-			}
-		}
-		return "User Data Does Not Matched"
-
+      throw new NotFoundException('User does not exist');
     }
-    catch (err) {
-        throw new HttpException('Invalid input ' + err, HttpStatus.BAD_REQUEST);
-    }
-	}
 
-	async updateUser(id: ObjectId, bookData: CreateUserDto) {
-		return this.userDao.update(id, bookData);
-	}
+    const { _id, phoneNo } = existingUser;
+    const isMatched = await this.validateUser(password, existingUser.password);
 
-	async deleteUserById(bookId: ObjectId) {
-		return this.userDao.delete(bookId);
-	}
-
-	async validateUser(reqPassword: string, dbPassword: string) {
-    try{
-    const passwordMatched=await this.encryptionService.comparePassword(reqPassword,dbPassword)
-    return passwordMatched;
-
-    }catch(err){
-    throw new HttpException('Invalid input ' + err, HttpStatus.BAD_REQUEST);
+    if (isMatched) {
+      const payload = { _id, email, phoneNo };
+      const tokenData = await this.tokenService.getToken(payload);
+      return tokenData;
+    } else {
+      throw new HttpException(
+        'Invalid email or password',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
   }
 
-  
-async clearCookie(res: any) {
+  async updateUser(id: string, userData: CreateUserDto) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid user ID format');
+    }
+    return this.userDao.update(id, userData);
+  }
+
+  async deleteUserById(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException('Invalid user ID format');
+    }
+    return this.userDao.delete(id);
+  }
+
+  async validateUser(reqPassword: string, dbPassword: string) {
+    const passwordMatched = await this.encryptionService.comparePassword(
+      reqPassword,
+      dbPassword,
+    );
+    if (!passwordMatched) {
+      throw new HttpException('Invalid password', HttpStatus.UNAUTHORIZED);
+    }
+    return passwordMatched;
+  }
+
+  async clearCookie(res: any) {
     const emptyCookie = [
       'Authentication=; HttpOnly; Path=/; Max-Age=0',
       'Refresh=; HttpOnly; Path=/; Max-Age=0',
     ];
     res.setHeader('Set-Cookie', emptyCookie);
   }
-
 }

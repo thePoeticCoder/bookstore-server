@@ -15,6 +15,7 @@ export class OrderController {
     @Body() data:ReqCreateOrderDto,
   ) {
     console.log("controller create order start");
+    console.log(data.cartId);
     return this.orderService.createOrder(data);
   }
 }

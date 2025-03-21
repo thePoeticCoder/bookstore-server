@@ -15,7 +15,7 @@ constructor(private readonly cartDao: CartDao) { };
   async findCartById(id: ObjectId) {
     console.log("cart service");
 
-    return this.cartDao.findOne(id);
+    return await this.cartDao.findOne(id);
   }
 
   async createCart(cartData: CartDto,) {
@@ -23,7 +23,7 @@ constructor(private readonly cartDao: CartDao) { };
   }
 
   async deleteCart(cartId: ObjectId) {
-    return this.cartDao.delete(cartId);
+    return await this.cartDao.delete(cartId);
   }
 }
 
